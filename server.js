@@ -17,7 +17,13 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: ['https://day-execution-frontend.vercel.app', 'http://localhost:5173'],
+  origin: [
+    'https://day-execution-frontend.vercel.app',
+    'http://localhost:5173',
+    'exp://192.168.0.10:8081',
+    'exp://127.0.0.1:8081',
+    'http://localhost:8081'
+  ],
   credentials: true
 }));
 app.use(bodyParser.json());
