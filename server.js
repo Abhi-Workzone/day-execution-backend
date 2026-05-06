@@ -16,7 +16,10 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://day-execution-frontend.vercel.app', 'http://localhost:5173'],
+  credentials: true
+}));
 app.use(bodyParser.json());
 
 // Routes
