@@ -73,9 +73,10 @@ exports.updateTaskExecution = async (req, res) => {
     plan.tasks[taskIndex].status = status;
     plan.tasks[taskIndex].reason = reason;
 
-    // If it's a todo task and marked done, update the global Task status
-    if (plan.tasks[taskIndex].type === 'todo' && status === 'done' && plan.tasks[taskIndex].taskId) {
-      await Task.findByIdAndUpdate(plan.tasks[taskIndex].taskId, { status: 'completed' });
+    // Sync global Task status with execution status
+    if (plan.tasks[taskIndex].type === 'todo' && plan.tasks[taskIndex].taskId) {
+      const globalStatus = status === 'done' ? 'completed' : 'pending';
+      await Task.findByIdAndUpdate(plan.tasks[taskIndex].taskId, { status: globalStatus });
     }
 
     // Update actualTotalTime
