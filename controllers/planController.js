@@ -4,15 +4,20 @@ const Task = require('../models/Task');
 
 exports.getTodayPlan = async (req, res) => {
   try {
-    const queryDate = req.query.date ? new Date(req.query.date) : new Date();
-    queryDate.setHours(0, 0, 0, 0);
+    let queryDate;
+    if (req.query.date) {
+      queryDate = new Date(req.query.date);
+    } else {
+      queryDate = new Date();
+    }
+    queryDate.setUTCHours(0, 0, 0, 0);
 
     let plan = await DailyPlan.findOne({ 
       date: queryDate, 
       $or: [{ userId: req.user._id }, { userId: { $exists: false } }]
     });
     
-    const dayOfWeek = queryDate.getDay();
+    const dayOfWeek = queryDate.getUTCDay();
     const routines = await Routine.find({ 
       daysOfWeek: dayOfWeek, 
       $or: [{ userId: req.user._id }, { userId: { $exists: false } }]
@@ -44,7 +49,7 @@ exports.savePlan = async (req, res) => {
   try {
     const { date, tasks, plannedTotalTime } = req.body;
     const planDate = new Date(date);
-    planDate.setHours(0, 0, 0, 0);
+    planDate.setUTCHours(0, 0, 0, 0);
 
     let plan = await DailyPlan.findOneAndUpdate(
       { date: planDate, userId: req.user._id },

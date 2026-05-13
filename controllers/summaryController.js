@@ -5,7 +5,7 @@ exports.createSummary = async (req, res) => {
   try {
     const { date, notes } = req.body;
     const summaryDate = new Date(date);
-    summaryDate.setHours(0, 0, 0, 0);
+    summaryDate.setUTCHours(0, 0, 0, 0);
 
     const plan = await DailyPlan.findOne({ 
       date: summaryDate, 
@@ -50,7 +50,7 @@ exports.createSummary = async (req, res) => {
 exports.getSummary = async (req, res) => {
   try {
     const date = new Date(req.params.date);
-    date.setHours(0, 0, 0, 0);
+    date.setUTCHours(0, 0, 0, 0);
     const summary = await DailySummary.findOne({ 
       date, 
       $or: [{ userId: req.user._id }, { userId: { $exists: false } }]
